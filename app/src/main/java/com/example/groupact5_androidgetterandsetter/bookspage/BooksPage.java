@@ -7,17 +7,26 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.groupact5_androidgetterandsetter.R;
+import com.example.groupact5_androidgetterandsetter.adapter.BookAdapter;
+import com.example.groupact5_androidgetterandsetter.adapter.EmployeeAdapter;
+import com.example.groupact5_androidgetterandsetter.employeepage.Employee;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BooksPage extends AppCompatActivity {
 
+    RecyclerView rvBook;
+    List<Book> bookList = new ArrayList<>();
+    BookAdapter bookAdapter;
     EditText etTitle, etAuthor;
     Button btnAddItem;
-    TextView tvResults;
 
     Book bookObject;
-    StringBuilder stringBuilder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,12 +34,12 @@ public class BooksPage extends AppCompatActivity {
         setContentView(R.layout.activity_books_page);
 
         bookObject = new Book();
-        stringBuilder = new StringBuilder();
+        bookAdapter = new BookAdapter(bookList);
 
+        rvBook = findViewById(R.id.rv_books);
         etTitle = findViewById(R.id.et_title);
         etAuthor = findViewById(R.id.et_author);
         btnAddItem = findViewById(R.id.btn_add_item);
-        tvResults = findViewById(R.id.tv_results);
 
         btnAddItem.setOnClickListener(v -> addFunction());
     }
@@ -41,9 +50,9 @@ public class BooksPage extends AppCompatActivity {
 
         Log.d("MAIN", "title: " + bookObject.getTitle() + ", author: " + bookObject.getAuthor());
 
-        stringBuilder.append("\n\n Title: ").append(bookObject.getTitle());
-        stringBuilder.append("\n Author: ").append(bookObject.getAuthor());
+        bookList.add(new Book(bookObject.getTitle(), bookObject.getAuthor()));
 
-        tvResults.setText(stringBuilder.toString());
+        rvBook.setAdapter(bookAdapter);
+        rvBook.setLayoutManager(new LinearLayoutManager(this));
     }
 }

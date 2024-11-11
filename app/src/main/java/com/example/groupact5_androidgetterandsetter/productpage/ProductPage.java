@@ -4,23 +4,27 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.example.groupact5_androidgetterandsetter.R;
+import com.example.groupact5_androidgetterandsetter.adapter.ProductAdapter;
 
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProductPage extends AppCompatActivity {
 
+    RecyclerView rvProduct;
     EditText etName, etPrice;
+    List<Product> productList = new ArrayList<>();
+    ProductAdapter productAdapter;
     Button btnAddItem;
-    TextView tvResults;
 
     Product productObject;
-
-    StringBuilder stringBuilder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,12 +32,12 @@ public class ProductPage extends AppCompatActivity {
         setContentView(R.layout.activity_product_page);
 
         productObject = new Product();
-        stringBuilder = new StringBuilder();
+        productAdapter = new ProductAdapter(productList);
 
+        rvProduct = findViewById(R.id.rv_product);
         etName = findViewById(R.id.et_name);
         etPrice = findViewById(R.id.et_price);
         btnAddItem = findViewById(R.id.btn_add_item);
-        tvResults = findViewById(R.id.tv_results);
 
         btnAddItem.setOnClickListener(v -> addFunction());
 
@@ -45,9 +49,9 @@ public class ProductPage extends AppCompatActivity {
 
         Log.d("MAIN", "name: " + productObject.getName() + ", prices: " + productObject.getPrice());
 
-        stringBuilder.append("\n\n Name: ").append(productObject.getName());
-        stringBuilder.append("\n Price: ").append(productObject.getPrice());
+        productList.add(new Product(productObject.getName(), productObject.getPrice()));
 
-        tvResults.setText(stringBuilder.toString());
+        rvProduct.setAdapter(productAdapter);
+        rvProduct.setLayoutManager(new LinearLayoutManager(this));
     }
 }

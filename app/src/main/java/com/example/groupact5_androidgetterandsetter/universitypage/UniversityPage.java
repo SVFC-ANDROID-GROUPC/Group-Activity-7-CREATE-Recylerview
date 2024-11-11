@@ -4,22 +4,30 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.example.groupact5_androidgetterandsetter.R;
+import com.example.groupact5_androidgetterandsetter.adapter.EmployeeAdapter;
+import com.example.groupact5_androidgetterandsetter.adapter.UniversityAdapter;
+import com.example.groupact5_androidgetterandsetter.employeepage.Employee;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class UniversityPage extends AppCompatActivity {
 
+    RecyclerView rvUniversity;
+    List<University> universityList = new ArrayList<>();
+    UniversityAdapter universityAdapter;
     EditText etName, etType;
     Button btnAddItem;
-    TextView tvResults;
 
     University universityObject;
-    StringBuilder stringBuilder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,12 +35,12 @@ public class UniversityPage extends AppCompatActivity {
         setContentView(R.layout.activity_university_page);
 
         universityObject = new University();
-        stringBuilder = new StringBuilder();
+        universityAdapter = new UniversityAdapter(universityList);
 
+        rvUniversity = findViewById(R.id.rv_university);
         etName = findViewById(R.id.et_name);
         etType = findViewById(R.id.et_type);
         btnAddItem = findViewById(R.id.btn_add_item);
-        tvResults = findViewById(R.id.tv_results);
 
         btnAddItem.setOnClickListener(v -> addFunction());
 
@@ -44,9 +52,9 @@ public class UniversityPage extends AppCompatActivity {
 
         Log.d("MAIN", "name: " + universityObject.getName() + ", type: " + universityObject.getType());
 
-        stringBuilder.append("\n\n School Name: ").append(universityObject.getName());
-        stringBuilder.append("\n Type: ").append(universityObject.getType());
+        universityList.add(new University(universityObject.getName(), universityObject.getType()));
 
-        tvResults.setText(stringBuilder.toString());
+        rvUniversity.setAdapter(universityAdapter);
+        rvUniversity.setLayoutManager(new LinearLayoutManager(this));
     }
 }
